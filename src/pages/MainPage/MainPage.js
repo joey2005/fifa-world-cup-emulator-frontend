@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import './MainPage.scss';
 
 function MainPage() {
@@ -9,11 +10,13 @@ function MainPage() {
         </h1>
       </div>
       <div className="main__options">
-        <div className="button">
-          <p className="button__text">
-            view / edit teams
-          </p>
-        </div>
+        <Link to="/teams" className="link">
+          <div className="button">
+            <p className="button__text">
+              view / edit teams
+            </p>
+          </div>
+        </Link>
         <div className="button">
           <p className="button__text">
             play matches
