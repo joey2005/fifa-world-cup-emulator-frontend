@@ -1,0 +1,24 @@
+@use './variables' as *;
+
+.button {
+  width: 20rem;
+  height: 4rem;
+  border-radius: 0.4rem;
+  background-color: $main-background-color;
+  color: $button-label-text-color;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: $main-text-color;
+    font-weight: bold;
+    box-shadow: 0.2rem 0.2rem $sub-text-color;
+  }
+
+  &__text {
+    text-transform: uppercase;
+    font-weight: inherit;
+  }
+}
