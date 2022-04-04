@@ -2,21 +2,25 @@
 @use './styles/partials/fonts' as *;
 @use './styles/partials/global' as *;
 
-@keyframes backgroundFadeOut {
+@keyframes backgroundFadeInOut {
   0% {
     opacity: 1;
   }
 
-  12% {
+  7% {
     opacity: 1;
   }
 
-  88% {
+  17% {
+    opacity: 0;
+  }
+
+  90% {
     opacity: 0;
   }
 
   100% {
-    opacity: 0;
+    opacity: 1;
   }
 }
 
@@ -28,6 +32,7 @@
     min-width: 100vw;
     min-height: 100vh;
     opacity: 0.5;
+    z-index: 0;
 
     & img {
       position: absolute;
@@ -35,16 +40,36 @@
       top: 0;
       min-width: 100vw;
       min-height: 100vh;
-    }
-  }
+      animation-name: backgroundFadeInOut;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-duration: 15s;
+      animation-direction: normal;
 
-  &__background-top {
-    animation-name: backgroundFadeOut;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-duration: 4s;
-    animation-direction: normal;
-    z-index: 50;
+      &:nth-of-type(1) {
+        animation-delay: 12.5s;
+      }
+
+      &:nth-of-type(2) {
+        animation-delay: 10s;
+      }
+
+      &:nth-of-type(3) {
+        animation-delay: 7.5s;
+      }
+
+      &:nth-of-type(4) {
+        animation-delay: 5s;
+      }
+
+      &:nth-of-type(5) {
+        animation-delay: 2.5s;
+      }
+
+      &:nth-of-type(6) {
+        animation-delay: 0;
+      }
+    }
   }
 
   &__background-bottom {
