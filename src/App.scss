@@ -2,7 +2,59 @@
 @use './styles/partials/fonts' as *;
 @use './styles/partials/global' as *;
 
+@keyframes backgroundFadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  88% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 .wrapper {
-  width: 80%;
-  margin: 0 10%;
+  &__background {
+    position: fixed;
+    left: 0;
+    top: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    opacity: 0.5;
+
+    & img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+    }
+  }
+
+  &__background-top {
+    animation-name: backgroundFadeOut;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 4s;
+    animation-direction: normal;
+    z-index: 50;
+  }
+
+  &__background-bottom {
+    z-index: 25;
+  }
+
+  &__main {
+    position: relative;
+    z-index: 100;
+    width: 80%;
+    margin: 0 10%;
+  }
 }
