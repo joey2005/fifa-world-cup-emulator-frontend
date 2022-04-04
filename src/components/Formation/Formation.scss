@@ -1,0 +1,21 @@
+@use '../../styles/partials/variables' as *;
+
+.formation-form {
+  margin-top: 3.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.react-select-container {
+  width: 80%;
+}
+
+.react-select {
+  &__placeholder,
+  &__menu-list {
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+    color: $main-text-color !important;
+  }
+}

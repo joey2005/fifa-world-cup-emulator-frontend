@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Formation from '../../components/Formation/Formation';
 import './TeamInfo.scss';
 
 class TeamInfo extends Component {
@@ -12,10 +13,43 @@ class TeamInfo extends Component {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/teams`)
       .then(res => {
+        const team = res.data.find(team => {
+          return team.teamID === teamID
+        });
         this.setState({
-          team: res.data.find(team => {
-            return team.teamID === teamID
-          })
+          team,
+          formation: team.formation
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  handleFormationChange = (selectedOption) => {
+    this.setState({
+      formation: selectedOption.value
+    });
+  }
+
+  submitFormationChange = (event) => {
+    event.preventDefault();
+    const { formation } = this.state;
+    const { teamID } = this.state.team;
+    axios
+      .put(
+        `${process.env.REACT_APP_BACKEND_URL}/teams/${teamID}`,
+        {
+          formation: formation
+        }
+      )
+      .then(res => {
+        const team = res.data.find(team => {
+          return team.teamID === teamID
+        });
+        this.setState({
+          team,
+          formation: team.formation
         });
       })
       .catch(err => {
@@ -24,7 +58,7 @@ class TeamInfo extends Component {
   }
 
   render() {
-    const { team } = this.state;
+    const { team, formation } = this.state;
     return (
       team.teamID ?
       <div className="team-info">
@@ -58,12 +92,6 @@ class TeamInfo extends Component {
               </span>
               {team.coach}
             </p>
-            <p className="team-info__formation">
-              <span className="team-info__formation--bold">
-                Current Formation:&nbsp;
-              </span>
-              {}
-            </p>
             <p className="team-info__appearance">
               <span className="team-info__appearance--bold">
                 2022 FIFA World Cup appearance:&nbsp;
@@ -72,6 +100,11 @@ class TeamInfo extends Component {
             </p>
           </div>
         </div>
+        <Formation
+          formation={formation}
+          handleFormationChange={this.handleFormationChange}
+          submitFormationChange={this.submitFormationChange}
+        />
       </div> :
       <></>
     );
