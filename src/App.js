@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import PageHeader from './components/PageHeader/PageHeader';
 import MainPage from './pages/MainPage/MainPage';
 import TeamsPage from './pages/TeamsPage/TeamsPage';
 import TeamInfo from './components/TeamInfo/TeamInfo';
@@ -22,6 +23,7 @@ function App() {
           <img src={bg2} alt="background-2" />
           <img src={bg1} alt="background-1" />
         </div>
+        <PageHeader />
         <div className="wrapper__main">
           <Switch>
             <Route path="/" exact component={MainPage} />

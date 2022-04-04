@@ -1,0 +1,33 @@
+@use '../../styles/partials/global' as *;
+@use '../../styles/partials/variables' as *;
+
+.nav {
+  position: relative;
+  z-index: 100;
+  padding: 3.2rem 5% 3.2rem 5%;
+  margin-bottom: 3.2rem;
+  background-color: rgba($sub-background-color, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  .nav__list {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav__item {
+    width: 33%;
+  }
+
+  .nav__logo,
+  .nav__link-text {
+    color: $main-text-color;
+
+    &:hover {
+      font-weight: bold;
+    }
+  }
+}
