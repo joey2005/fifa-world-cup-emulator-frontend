@@ -32,7 +32,7 @@ function App() {
             <Route path="/teams" exact component={TeamsPage} />
             <Route path="/teams/:teamID" component={TeamInfo} />
             <Route path="/games" exact component={GamePage} />
-            <Route path="/games/friendly" component={SingleMatch} />
+            <Route path="/games/friendly" exact component={SingleMatch} />
           </Switch>
         </div>
       </div>

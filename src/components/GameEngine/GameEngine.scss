@@ -1,0 +1,38 @@
+.game-visualizer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    margin: 0 35%;
+  }
+
+  &__button {
+    margin: 3.2rem auto 0 auto;
+  }
+}
+
+.scoreboard {
+  margin-top: 3.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__team {
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__score {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
