@@ -17,11 +17,13 @@ function MainPage() {
             </p>
           </div>
         </Link>
-        <div className="button">
-          <p className="button__text">
-            play matches
-          </p>
-        </div>
+        <Link to="/games" className="link">
+          <div className="button">
+            <p className="button__text">
+              play matches
+            </p>
+          </div>
+        </Link>
       </div>
     </section>
   );

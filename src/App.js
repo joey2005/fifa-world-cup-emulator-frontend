@@ -3,6 +3,8 @@ import PageHeader from './components/PageHeader/PageHeader';
 import MainPage from './pages/MainPage/MainPage';
 import TeamsPage from './pages/TeamsPage/TeamsPage';
 import TeamInfo from './components/TeamInfo/TeamInfo';
+import GamePage from './pages/GamePage/GamePage';
+import SingleMatch from './components/SingleMatch/SingleMatch';
 import bg1 from './assets/images/stadium-1.jpg';
 import bg2 from './assets/images/stadium-2.jpg';
 import bg3 from './assets/images/stadium-3.jpg';
@@ -29,6 +31,8 @@ function App() {
             <Route path="/" exact component={MainPage} />
             <Route path="/teams" exact component={TeamsPage} />
             <Route path="/teams/:teamID" component={TeamInfo} />
+            <Route path="/games" exact component={GamePage} />
+            <Route path="/games/friendly" component={SingleMatch} />
           </Switch>
         </div>
       </div>
