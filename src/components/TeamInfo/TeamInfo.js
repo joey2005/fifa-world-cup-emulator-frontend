@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Formation from '../../components/Formation/Formation';
+import Squad from '../../components/Squad/Squad';
 import './TeamInfo.scss';
 
 class TeamInfo extends Component {
@@ -104,6 +105,10 @@ class TeamInfo extends Component {
           formation={formation}
           handleFormationChange={this.handleFormationChange}
           submitFormationChange={this.submitFormationChange}
+        />
+        <Squad
+          teamName={team.teamName}
+          formation={formation}
         />
       </div> :
       <></>
