@@ -16,6 +16,21 @@
   }
 }
 
+.game-presentation {
+  margin: 3.2rem 15% 0 15%;
+  position: relative;
+  background-image: url('../../assets/images/field.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 70%;
+  height: 51.5rem;
+
+  &__player-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
 .scoreboard {
   margin-top: 3.2rem;
   display: flex;
@@ -29,10 +44,54 @@
     align-items: center;
   }
 
+  &__home-shirt {
+    height: 3.2rem;
+    width: 3.2rem;
+    margin-right: 0.8rem;
+  }
+
+  &__away-shirt {
+    height: 3.2rem;
+    width: 3.2rem;
+    margin-left: 0.8rem;
+  }
+
   &__score {
     width: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+}
+
+.game-record {
+  margin-top: 3.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__team {
+    width: 35%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__blank {
+    width: 30%;
+  }
+
+  &__record {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__image {
+    margin: 0 0.4rem;
+    width: 2.2rem;
+    height: 2.2rem;
   }
 }
