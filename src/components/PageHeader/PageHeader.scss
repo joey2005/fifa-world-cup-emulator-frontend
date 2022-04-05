@@ -10,20 +10,31 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
-  .nav__list {
+
+  &__list {
     width: 25%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .nav__item {
+  &__item {
     width: 33%;
   }
 
-  .nav__logo,
-  .nav__link-text {
+  &__logo-box {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+
+  &__logo {
+    height: 3.2rem;
+    margin-right: 0.8rem;
+  }
+
+  &__logo-text,
+  &__link-text {
     color: $main-text-color;
 
     &:hover {
