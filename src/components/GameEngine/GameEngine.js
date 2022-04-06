@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import homePlayerIcon from '../../assets/icons/plain-blue-football-shirt.svg';
 import awayPlayerIcon from '../../assets/icons/plain-white-football-shirt.svg';
-import soccerIcon from '../../assets/icons/soccer_ball.svg';
+import soccerIcon from '../../assets/icons/soccer-ball-icon.svg';
 import './GameEngine.scss';
 
 class GameEngine {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import worldCupIcon from '../../assets/icons/world-cup.svg';
+import worldCupIcon from '../../assets/icons/world-cup-icon.svg';
 import './PageHeader.scss'
 
 function PageHeader() {

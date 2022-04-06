@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { GameVisualizer } from '../../components/GameEngine/GameEngine';
-import backArrow from '../../assets/icons/back_arrow_icon.svg';
+import backArrow from '../../assets/icons/back-arrow-icon.svg';
 import './SingleMatch.scss';
 
 class SingleMatch extends Component {
