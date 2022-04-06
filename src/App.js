@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PageHeader from './components/PageHeader/PageHeader';
 import MainPage from './pages/MainPage/MainPage';
+import AboutPage from './pages/AboutPage/AboutPage';
 import TeamsPage from './pages/TeamsPage/TeamsPage';
 import TeamInfo from './components/TeamInfo/TeamInfo';
 import GamePage from './pages/GamePage/GamePage';
@@ -29,6 +30,7 @@ function App() {
         <div className="wrapper__main">
           <Switch>
             <Route path="/" exact component={MainPage} />
+            <Route path="/about" component={AboutPage} />
             <Route path="/teams" exact component={TeamsPage} />
             <Route path="/teams/:teamID" component={TeamInfo} />
             <Route path="/games" exact component={GamePage} />

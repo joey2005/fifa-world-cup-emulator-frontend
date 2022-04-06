@@ -1,0 +1,24 @@
+.about {
+  &__title {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__story {
+    width: 100%;
+    margin-top: 8rem;
+  }
+
+  &__story-text {
+    width: 70%;
+    font-style: italic;
+    font-weight: bold;
+
+    &--align-right {
+      text-align: right;
+      margin-left: 30%;
+    }
+  }
+}
