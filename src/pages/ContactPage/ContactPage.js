@@ -35,7 +35,7 @@ function ContactPage() {
             GitHub
           </h3>
           <img 
-            src={linkedinContact}
+            src={githubContact}
             alt="github-contact"
             className="contact__qr-code"
           />
