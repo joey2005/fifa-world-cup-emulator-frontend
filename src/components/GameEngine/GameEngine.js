@@ -5,11 +5,11 @@ import soccerIconInGame from '../../assets/icons/soccer-ball-icon-in-game.svg';
 import './GameEngine.scss';
 
 class GameEngine {
-  static forwardProb = 0.9;
-  static passingProb = 0.25;
+  static forwardProb = 0.95;
+  static passingProb = 0.3;
   static passingSuccess = 0.85;
   static passingRange = 5;
-  static shootingProb = 0.01;
+  static shootingProb = 0.02;
   static shootingSuccess = 0.5;
   static minShootingRange = 0.2;
   static maxShootingRange = 0.5;
@@ -17,7 +17,7 @@ class GameEngine {
   static maxPossession = 60;
   static fieldPos = ['df', 'mf', 'fw'];
   static fieldPosAll = ['gk', 'df', 'mf', 'fw'];
-  static levelDifference = 20;
+  static levelDifference = 15;
   static minFormDistance = 0.08;
   static INF = 1000000000;
 
