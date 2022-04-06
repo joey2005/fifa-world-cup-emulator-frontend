@@ -13,7 +13,7 @@ class Squad extends Component {
     return teamName.replace(' ', '%20');
   }
 
-  drawFormation() {
+  drawPlayer() {
     const { starter, formation } = this.state;
     return (
       starter ?
@@ -107,7 +107,7 @@ class Squad extends Component {
     return (
       <div className="squad">
         <div className="squad__presentation">
-          {this.drawFormation()}
+          {this.drawPlayer()}
         </div>
         <button
           onClick={this.handleChangeSquad}

@@ -29,6 +29,12 @@
     width: 1.6rem;
     height: 1.6rem;
   }
+
+  &__ball-icon {
+    width: 0.8rem;
+    height: 0.8rem;
+    transform: translate(0, 0.4rem);
+  }
 }
 
 .scoreboard {
@@ -91,7 +97,7 @@
 
   &__image {
     margin: 0 0.4rem;
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 1.8rem;
+    height: 1.8rem;
   }
 }
