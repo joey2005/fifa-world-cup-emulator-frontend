@@ -61,7 +61,7 @@
 
   &__standing-nav {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: flex-start;
     border-bottom: solid 0.1rem $divider-color-dark;
     margin-top: 0.8rem;
@@ -69,7 +69,7 @@
 
   &__team-standing {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: flex-start;
     padding: 0.4rem 0;
     border-bottom: solid 0.1rem $divider-color-dark;

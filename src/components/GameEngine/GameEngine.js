@@ -442,7 +442,8 @@ class GameEngine {
               this.stats.passSuccess[possession] += 1;
             }
             const distanceArray = [];
-            GameEngine.fieldPos.forEach(pos => {
+            for (let i = 0; i < GameEngine.fieldPos.length; ++i) {
+              const pos = GameEngine.fieldPos[i];
               for (const index in currentPosition[possession][pos]) {
                 if (pos !== player.pos || index !== player.index) {
                   distanceArray.push({
@@ -455,7 +456,7 @@ class GameEngine {
                   });
                 }
               }
-            });
+            };
             distanceArray.sort((a, b) => {
               if (a.distance < b.distance) {
                 return -1;
@@ -470,7 +471,8 @@ class GameEngine {
           } else {
             let minDistance = GameEngine.INF;
             let nextPlayer = {};
-            GameEngine.fieldPos.forEach(pos => {
+            for (let i = 0; i < GameEngine.fieldPos.length; ++i) {
+              const pos = GameEngine.fieldPos[i];
               for (const index in currentPosition[opponent][pos]) {
                 const distance = GameEngine.calcDistance(
                   currentPosition[opponent][pos][index],
@@ -481,7 +483,7 @@ class GameEngine {
                   nextPlayer = { pos, index };
                 }
               }
-            });
+            };
             possession = opponent;
             player = nextPlayer;
           }
@@ -503,7 +505,8 @@ class GameEngine {
         defenseDirection = -attackDirection;
       }
       for (const side in currentPosition) {
-        GameEngine.fieldPos.forEach(pos => {
+        for (let i = 0; i < GameEngine.fieldPos.length; ++i) {
+          const pos = GameEngine.fieldPos[i];
           for (const index in currentPosition[side][pos]) {
             const { x, y } = currentPosition[side][pos][index]
             if (side === possession) {
@@ -535,7 +538,7 @@ class GameEngine {
               nextPosition[side][pos][index].y = y;    
             }
           }
-        });
+        };
       }
       currentPosition = nextPosition;
     }
