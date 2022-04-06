@@ -6,6 +6,10 @@
   justify-content: center;
   align-items: center;
 
+  &__button {
+    margin-top: 3.2rem;
+  }
+
   &__group {
     width: 100%;
     display: flex;
@@ -14,31 +18,37 @@
     flex-wrap: wrap;
   }
 
-  &__group-match {
+  &__group-match,
+  &__knockout-match {
+    margin-top: 3.2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
 
-  &__group-match-title {
+  &__group-match-title,
+  &__knockout-match-title {
     margin-bottom: 1.6rem;
   }
 
-  &__group-match-result {
+  &__group-match-result,
+  &__knockout-match-result {
     margin-top: 0.8rem;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  &__group-match-team {
+  &__group-match-team,
+  &__knockout-match-team {
     font-weight: bold;
     width: 15rem;
     text-align: center;
   }
 
-  &__group-match-score {
+  &__group-match-score,
+  &__knockout-match-score {
     font-weight: bold;
     width: 10rem;
     text-align: center;
@@ -81,9 +91,5 @@
     &--bold {
       font-weight: bold;
     }
-  }
-
-  &__button {
-    margin: 3.2rem;
   }
 }

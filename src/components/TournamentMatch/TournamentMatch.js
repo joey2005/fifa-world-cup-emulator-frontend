@@ -208,13 +208,113 @@ class GroupStage {
       'awayScore': rs.away
     };
   }
+
+  getTeam(group, teamName) {
+    for (const index in this.teams[group]) {
+      if (this.teams[group][index].teamName === teamName) {
+        return this.teams[group][index];
+      }
+    }
+  }
+}
+
+class Knockout {
+  constructor(teamsData, playersData) {
+    this.teams = teamsData;
+    this.players = playersData;
+    this.formations = this.teams.map(team => {
+      return team.formation.split('-').map(num => {
+        return Number.parseInt(num);
+      })
+    })
+    this.schedule = [
+      [0, 1],
+      [2, 3],
+      [4, 5],
+      [6, 7],
+      [8, 9],
+      [10, 11],
+      [12, 13],
+      [14, 15]
+    ];
+    this.winner = [];
+    this.start = 0;
+  }
+
+  nextGame(matchID) {
+    const i = this.schedule[matchID][0];
+    const j = this.schedule[matchID][1];
+    const teamX = this.teams[i];
+    const teamY = this.teams[j];
+    const engine = new GameEngine(
+      {
+        'squad': this.players[i],
+        'formation': this.formations[i],
+        'teamName': teamX.teamName,
+        'ranking': teamX.teamID
+      },
+      {
+        'squad': this.players[j],
+        'formation': this.formations[j],
+        'teamName': teamY.teamName,
+        'ranking': teamY.teamID
+      },
+      true,
+      true
+    );
+    const score = engine.startGame();
+    const { regularScore : rs, extraScore: es, penaltyScore: ps } = score;
+    if (rs.home !== rs.away) {
+      if (rs.home > rs.away) {
+        this.winner.push(i);
+      } else {
+        this.winner.push(j);
+      }
+    } else if (es.home !== es.away) {
+      if (es.home > es.away) {
+        this.winner.push(i);
+      } else {
+        this.winner.push(j);
+      }
+    } else {
+      if (ps.home > ps.away) {
+        this.winner.push(i);
+      } else {
+        this.winner.push(j);
+      }
+    }
+    return {
+      'home': teamX.teamName,
+      'away': teamY.teamName,
+      score
+    };
+  }
+
+  updateSchedule() {
+    if (this.schedule.length === 15) {
+      return false;
+    }
+    const end = this.schedule.length;
+    for (let i = this.start; i < end; i += 2) {
+      this.schedule.push([this.winner[i], this.winner[i + 1]]);
+    }
+    this.start = end;
+    return true;
+  }
 }
 
 class TournamentMatch extends Component {
   state = {
     standings: {},
     nextGroupStageGame: 0,
-    groupMatchResult: []
+    groupMatchResult: [],
+    nextKnockoutGame: 0,
+    knockoutMatchResult: {
+      'round-of-16': [],
+      'quarter-finals': [],
+      'semi-finals': [],
+      'final': []
+    }
   }
 
   componentDidMount() {
@@ -243,7 +343,7 @@ class TournamentMatch extends Component {
       () => {
         this.runNextGroupStageGame();
       },
-      1500
+      1000
     );
   }
 
@@ -254,22 +354,85 @@ class TournamentMatch extends Component {
     this.setState({
       standings: groupStage.calcStandings(),
       nextGroupStageGame: nextGroupStageGame + 2,
-      groupMatchResult: groupMatchResult.concat([matchResult1, matchResult2])
+      groupMatchResult: [matchResult1, matchResult2].concat(groupMatchResult)
+    });
+  }
+
+  runNextKnockoutGame() {
+    const { knockout, nextKnockoutGame, knockoutMatchResult } = this.state;
+    const matchResult = knockout.nextGame(nextKnockoutGame);
+    const newKnockoutMatchResult = {...knockoutMatchResult};
+    if (nextKnockoutGame < 8) {
+      newKnockoutMatchResult['round-of-16'].splice(0, 0, matchResult);
+    } else if (nextKnockoutGame < 12) {
+      newKnockoutMatchResult['quarter-finals'].splice(0, 0, matchResult);
+    } else if (nextKnockoutGame < 14) {
+      newKnockoutMatchResult['semi-finals'].splice(0, 0, matchResult);
+    } else {
+      newKnockoutMatchResult['final'].push(matchResult);
+    }
+    this.setState({
+      nextKnockoutGame: nextKnockoutGame + 1,
+      knockoutMatchResult: newKnockoutMatchResult
     });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { groupStage, nextGroupStageGame } = this.state;
+    const {
+      groupStage,
+      nextGroupStageGame,
+      knockout,
+      nextKnockoutGame,
+      standings,
+      playersData
+    } = this.state;
     if (nextGroupStageGame > prevState.nextGroupStageGame &&
       nextGroupStageGame === groupStage.schedule.length) {
       clearInterval(this.timerID);
-      this.setState({
-        startKnockout: true
+      const teamAdvanced = [
+        groupStage.getTeam('A', standings['A'][0].teamName),
+        groupStage.getTeam('B', standings['B'][1].teamName),
+        groupStage.getTeam('C', standings['C'][0].teamName),
+        groupStage.getTeam('D', standings['D'][1].teamName),
+        groupStage.getTeam('E', standings['E'][0].teamName),
+        groupStage.getTeam('F', standings['F'][1].teamName),
+        groupStage.getTeam('G', standings['G'][0].teamName),
+        groupStage.getTeam('H', standings['H'][1].teamName),
+        groupStage.getTeam('B', standings['B'][0].teamName),
+        groupStage.getTeam('A', standings['A'][1].teamName),
+        groupStage.getTeam('D', standings['D'][0].teamName),
+        groupStage.getTeam('C', standings['C'][1].teamName),
+        groupStage.getTeam('F', standings['F'][0].teamName),
+        groupStage.getTeam('E', standings['E'][1].teamName),
+        groupStage.getTeam('H', standings['H'][0].teamName),
+        groupStage.getTeam('G', standings['G'][1].teamName)
+      ];
+      const playerAdvanced = teamAdvanced.map(team => {
+        return playersData.filter(player => {
+          return player.Country === team.teamName;
+        });
       });
+      this.setState({
+        startKnockout: true,
+        knockout: new Knockout(teamAdvanced, playerAdvanced)
+      });
+    }
+    if (nextKnockoutGame > prevState.nextKnockoutGame) {
+      if (nextKnockoutGame === knockout.schedule.length) {
+        if (!knockout.updateSchedule()) {
+          clearInterval(this.timerID);
+        }
+      }
     }
   }
 
   handleStartKnockout = () => {
+    this.timerID = setInterval(
+      () => {
+        this.runNextKnockoutGame()
+      },
+      1000
+    );
   }
 
   createStandings(finalStandings, teamsData) {
@@ -340,15 +503,86 @@ class TournamentMatch extends Component {
       standings,
       groupStage,
       groupMatchResult,
-      startKnockout
+      startKnockout,
+      knockoutMatchResult
     } = this.state;
     const groupID = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    const knockoutStage = ['final', 'semi-finals', 'quarter-finals', 'round-of-16'];
+    const knockoutStageTitle = ['Final', 'Semi-finals', 'Quarter-finals', 'Round of 16'];
     return (
       <div className="tournament">
         {
+          startKnockout ?
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              this.handleStartKnockout();
+            }}
+            className="button tournament__button"
+          >
+            <p className="button-text">
+              Start Knockout Stage
+            </p>
+          </button> :
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              this.handleStartGroupStage();
+            }}
+            className="button tournament__button"
+          >
+            <p className="button-text">
+              Start Group Stage
+            </p>
+          </button>
+        }
+        {
+          knockoutStage.map((roundName, index) => {
+            return (
+              knockoutMatchResult[roundName].length > 0 &&
+              <div key={roundName} className="tournament__knockout-match">
+                <h2 className="tournament__knockout-match-title">
+                  {knockoutStageTitle[index]}
+                </h2>
+                {
+                  knockoutMatchResult[roundName].map((matchResult, index) => {
+                    const { home, away, score } = matchResult;
+                    let homeScore = score.regularScore.home;
+                    let awayScore = score.regularScore.away;
+                    if (score.extraScore) {
+                      homeScore += score.extraScore.home;
+                      awayScore += score.extraScore.away;
+                      if (score.penaltyScore) {
+                        homeScore += ` (${score.penaltyScore.home})`;
+                        awayScore += ` (${score.penaltyScore.away})`;
+                      }
+                    }
+                    return (
+                      <div
+                        key={index}
+                        className="tournament__knockout-match-result"
+                      >
+                        <p className="tournament__knockout-match-team">
+                          {home}
+                        </p>
+                        <p className="tournament__knockout-match-score">
+                          {homeScore} : {awayScore}
+                        </p>
+                        <p className="tournament__knockout-match-team">
+                          {away}
+                        </p>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            );
+          })
+        }
+        {
           groupMatchResult.length > 0 &&
           <div className="tournament__group-match">
-            <h2 className="tournament__group-match-title">Match Result</h2>
+            <h2 className="tournament__group-match-title">Group Stage</h2>
             {
               groupMatchResult.map((matchResult, index) => {
                 return (
@@ -386,31 +620,6 @@ class TournamentMatch extends Component {
             })
           }
         </div>
-        {
-          startKnockout ?
-          <button
-            onClick={(event) => {
-              event.preventDefault();
-              this.handleStartKnockout();
-            }}
-            className="button tournament__button"
-          >
-            <p className="button-text">
-              Start Knockout Stage
-            </p>
-          </button> :
-          <button
-            onClick={(event) => {
-              event.preventDefault();
-              this.handleStartGroupStage();
-            }}
-            className="button tournament__button"
-          >
-            <p className="button-text">
-              Start Group Stage
-            </p>
-          </button>
-        }
       </div>
     );
   }
