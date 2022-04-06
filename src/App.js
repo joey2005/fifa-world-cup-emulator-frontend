@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PageHeader from './components/PageHeader/PageHeader';
 import MainPage from './pages/MainPage/MainPage';
 import AboutPage from './pages/AboutPage/AboutPage';
+import ContactPage from './pages/ContactPage/ContactPage';
 import TeamsPage from './pages/TeamsPage/TeamsPage';
 import TeamInfo from './components/TeamInfo/TeamInfo';
 import GamePage from './pages/GamePage/GamePage';
@@ -31,6 +32,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={MainPage} />
             <Route path="/about" component={AboutPage} />
+            <Route path="/contact" component={ContactPage} />
             <Route path="/teams" exact component={TeamsPage} />
             <Route path="/teams/:teamID" component={TeamInfo} />
             <Route path="/games" exact component={GamePage} />

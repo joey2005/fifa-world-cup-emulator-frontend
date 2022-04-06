@@ -3,11 +3,9 @@ import './AboutPage.scss';
 function AboutPage() {
   return (
     <section className="about">
-      <div className="about__title-box">
-        <h1 className="about__title">
-          Our Story
-        </h1>
-      </div>
+      <h1 className="about__title">
+        Our Story
+      </h1>
       <div className="about__story">
         <p className="about__story-text">
           The World Cup is the most prestigious association football tournament in the world, as well as the most widely viewed and followed single sporting event in the world. The cumulative viewership of all matches of the 2006 World Cup was estimated to be 26.29 billion with an estimated 715.1 million people watching the final match, a ninth of the entire population of the planet.
