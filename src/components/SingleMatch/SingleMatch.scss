@@ -56,7 +56,14 @@
     margin-top: 3.2rem;
     width: 90%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__name {
+    width: 80%;
+    display: flex;
+    justify-content: center;
     align-items: center;
   }
 

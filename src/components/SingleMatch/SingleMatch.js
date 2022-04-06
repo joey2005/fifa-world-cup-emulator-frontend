@@ -15,7 +15,7 @@ class SingleMatch extends Component {
     const { teamsData } = this.state;
     while (true) {
       index = (index + 1) % teamsData.length;
-      if (index != otherIndex) {
+      if (index !== otherIndex) {
         break;
       }
     }
@@ -26,7 +26,7 @@ class SingleMatch extends Component {
     const { teamsData } = this.state;
     while (true) {
       index = (index + teamsData.length - 1) % teamsData.length;
-      if (index != otherIndex) {
+      if (index !== otherIndex) {
         break;
       }
     }
@@ -52,6 +52,10 @@ class SingleMatch extends Component {
       .catch(err => {
         console.log(err);
       })
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.homeTeam, this.state.awayTeam);
   }
 
   handleStartGame = (event) => {
@@ -103,7 +107,7 @@ class SingleMatch extends Component {
         handleEndGame={this.handleEndGame}
       /> :
       (
-        awayTeam ?
+        teamsData.length > 0 &&
         <div className="select-wrapper">
           <div className="select-team">
             <div className="select-team__home">
@@ -129,9 +133,9 @@ class SingleMatch extends Component {
                   alt="go-back"
                   className="select-team__prev-icon"
                 />
-                <h2 className="select-team__name">
-                  {teamsData[homeTeam].teamName}
-                </h2>
+                <div className="select-team__name">
+                  <h2>{teamsData[homeTeam].teamName}</h2>
+                </div>
                 <img 
                   onClick={(event) => {
                     event.preventDefault();
@@ -171,9 +175,9 @@ class SingleMatch extends Component {
                   alt="go-back"
                   className="select-team__prev-icon"
                 />
-                <h2 className="select-team__name">
-                  {teamsData[awayTeam].teamName}
-                </h2>
+                <div className="select-team__name">
+                  <h2>{teamsData[awayTeam].teamName}</h2>
+                </div>
                 <img 
                   onClick={(event) => {
                     event.preventDefault();
@@ -196,8 +200,7 @@ class SingleMatch extends Component {
               start game
             </p>
           </div>
-        </div> :
-        <></>
+        </div>
       )
     );
   }
