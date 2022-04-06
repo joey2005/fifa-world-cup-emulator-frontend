@@ -1,0 +1,38 @@
+.contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__main {
+    margin-top: 3.2rem;
+    font-weight: bold;
+    height: 25vh;
+  }
+
+  &__information {
+    width: 90%;
+    margin: 3.2rem 5% 0 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &__box {
+    width: 30%;
+    margin-top: 3.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__detail {
+    margin-top: 1.6rem;
+    
+    &--bold {
+      font-weight: bold;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+@use '../../styles/partials/global' as *;
+@use '../../styles/partials/variables' as *;
+
+.nav {
+  position: relative;
+  z-index: 100;
+  padding: 3.2rem 5% 3.2rem 5%;
+  margin-bottom: 3.2rem;
+  background-color: rgba($sub-background-color, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__list {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__item {
+    width: 33%;
+  }
+
+  &__logo-box {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  &__logo {
+    height: 3.2rem;
+    margin-right: 0.8rem;
+  }
+
+  &__logo-text,
+  &__link-text {
+    color: $main-text-color;
+
+    &:hover {
+      font-weight: bold;
+    }
+  }
+}

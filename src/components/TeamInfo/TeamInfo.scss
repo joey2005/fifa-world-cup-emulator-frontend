@@ -1,0 +1,38 @@
+.team-info {
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &__country-flag {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &__image {
+    height: 40vh;
+  }
+
+  &__description {
+    width: 30%;
+    margin-left: 10%;
+  }
+
+  &__name {
+    margin-bottom: 1.6rem;
+  }
+
+  &__ranking,
+  &__record,
+  &__coach,
+  &__appearance {
+    margin-top: 0.8rem;
+
+    &--bold {
+      font-weight: bold;
+    }
+  }
+}

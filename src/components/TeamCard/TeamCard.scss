@@ -1,0 +1,20 @@
+@use '../../styles/partials/variables' as *;
+
+.team-card {
+  width: 20%;
+  height: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__image {
+    width: 80%;
+    height: 12rem;
+  }
+
+  &__name {
+    margin-top: 0.8rem;
+    color: $main-text-color;
+  }
+}

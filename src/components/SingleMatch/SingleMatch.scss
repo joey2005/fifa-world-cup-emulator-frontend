@@ -1,0 +1,88 @@
+@use '../../styles/partials/global' as *;
+
+.select-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__button {
+    margin-top: 3.2rem;
+  }
+}
+
+.select-team {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__home {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__vs {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__away {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 65vh;
+  }
+
+  &__image {
+    margin-top: 6.4rem;
+    width: 100%;
+  }
+
+  &__selector {
+    margin-top: 3.2rem;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__name {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__prev-icon {
+    width: 2.6rem;
+    cursor: pointer;
+    
+    &:hover {
+      filter: invert(73%) sepia(41%) saturate(344%) hue-rotate(71deg) brightness(86%) contrast(88%);
+    }
+  }
+
+  &__next-icon {
+    width: 2.6rem;
+    transform: rotate(180deg);
+    cursor: pointer;
+
+    &:hover {
+      filter: invert(73%) sepia(41%) saturate(344%) hue-rotate(71deg) brightness(86%) contrast(88%);
+    }
+  }
+}
