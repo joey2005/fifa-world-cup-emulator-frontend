@@ -6,18 +6,18 @@
   }
 
   &__country-flag {
-    width: 60%;
+    width: 55%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
   }
 
   &__image {
-    height: 40vh;
+    width: 100%;
   }
 
   &__description {
-    width: 30%;
+    width: 35%;
     margin-left: 10%;
   }
 
