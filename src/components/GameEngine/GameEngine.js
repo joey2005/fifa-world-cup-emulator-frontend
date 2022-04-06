@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import homePlayerIcon from '../../assets/icons/plain-blue-football-shirt.svg';
 import awayPlayerIcon from '../../assets/icons/plain-white-football-shirt.svg';
-import soccerIcon from '../../assets/icons/soccer-ball-icon.svg';
+import soccerIconInGame from '../../assets/icons/soccer-ball-icon-in-game.svg';
 import './GameEngine.scss';
 
 class GameEngine {
-  static forwardProb = 0.8;
+  static forwardProb = 0.9;
   static passingProb = 0.25;
   static passingSuccess = 0.85;
   static passingRange = 5;
@@ -31,6 +31,7 @@ class GameEngine {
     this.stats = {
       goal: [],
       playerPosition: [],
+      ballPosition: [],
       score: [],
       possessionCount: {
         'home': 0,
@@ -91,26 +92,31 @@ class GameEngine {
     return res;
   }
 
-  static calcStyle(position, direction) {
-    return direction === 'left' ?
-      {
-        'position': 'absolute',
-        'left': `${position.x * 100}%`,
-        'top': `${position.y * 100}%`
-      } :
-      {
-        'position': 'absolute',
-        'left': `${(position.x - 0.02) * 100}%`,
-        'top': `${position.y * 100}%`
-      };
+  static calcStyle(position, direction, possession) {
+    const res = { 'position': 'absolute' };
+    if (direction === 'left') {
+      res.left =`${position.x * 100}%`;
+      res.top =`${position.y * 100}%`;
+    } else {
+      res.left = `calc(${position.x * 100}% - 0.8rem)`;
+      res.top =`${position.y * 100}%`;
+    };
+    if (possession !== null) {
+      if (possession) {
+        res['z-index'] = 100;
+      } else {
+        res['z-index'] = 50;
+      }
+    }
+    return res;
   }
 
-  static calcStyleAll(position, direction) {
+  static calcStyleAll(position, direction, possession) {
     const res = {};
     GameEngine.fieldPosAll.forEach(pos => {
       res[pos] = [];
       for (const index in position[pos]) {
-        res[pos].push(GameEngine.calcStyle(position[pos][index], direction));
+        res[pos].push(GameEngine.calcStyle(position[pos][index], direction, possession));
       }
     });
     return res;
@@ -123,12 +129,18 @@ class GameEngine {
     return JSON.parse(JSON.stringify(obj));
   }
 
-  static adjustPosition(position, direction) {
+  static adjustPosition(position, direction, firstPossession) {
     const res = {...position};
     if (direction === 'left') {
       res.x = (res.x - 0.05) / 2 + 0.05;
+      if (firstPossession) {
+        res.x += 0.075;
+      }
     } else {
       res.x = 1 - (res.x - 0.05) / 2 - 0.05;
+      if (firstPossession) {
+        res.x -= 0.075;
+      }
     }
     return res;
   }
@@ -164,7 +176,7 @@ class GameEngine {
         y: 1.0 / (formation[pos]) * index + 0.1 * (5 / formation[pos])
       };
     }
-    res.style = GameEngine.calcStyle(res.pos, 'left');
+    res.style = GameEngine.calcStyle(res.pos, 'left', null);
     return res;
   }
 
@@ -176,31 +188,36 @@ class GameEngine {
     awayStarter,
     awayFormation,
     awayDirection,
-    awayTarget) {
+    awayTarget,
+    firstPossession) {
     return {
       'home': {
         'gk': homeStarter['gk'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(homeFormation, -1, index).pos,
-            homeDirection
+            homeDirection,
+            false
           );
         }),
         'df': homeStarter['df'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(homeFormation, 0, index).pos,
-            homeDirection
+            homeDirection,
+            firstPossession === 'home'
           );
         }),
         'mf': homeStarter['mf'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(homeFormation, 1, index).pos,
-            homeDirection
+            homeDirection,
+            firstPossession === 'home'
           );
         }),
         'fw': homeStarter['fw'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(homeFormation, 2, index).pos,
-            homeDirection
+            homeDirection,
+            firstPossession === 'home'
           );
         }),
         'target': homeTarget
@@ -209,25 +226,29 @@ class GameEngine {
         'gk': awayStarter['gk'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(awayFormation, -1, index).pos,
-            awayDirection
+            awayDirection,
+            false
           );
         }),
         'df': awayStarter['df'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(awayFormation, 0, index).pos,
-            awayDirection
+            awayDirection,
+            firstPossession === 'away'
           );
         }),
         'mf': awayStarter['mf'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(awayFormation, 1, index).pos,
-            awayDirection
+            awayDirection,
+            firstPossession === 'away'
           );
         }),
         'fw': awayStarter['fw'].map((player, index) => {
           return GameEngine.adjustPosition(
             GameEngine.calcInitPosition(awayFormation, 2, index).pos,
-            awayDirection
+            awayDirection,
+            firstPossession === 'away'
           );
         }),
         'target': awayTarget
@@ -263,35 +284,37 @@ class GameEngine {
     }
   }
 
+  static getMinimum(array) {
+    let res = GameEngine.INF;
+    array.forEach(a => {
+      res = Math.min(res, a);
+    })
+    return res;
+  }
+
+  static getMaximum(array) {
+    let res = -GameEngine.INF;
+    array.forEach(a => {
+      res = Math.max(res, a);
+    })
+    return res;    
+  }
+
   static calcMoveAreaLeft(position, opponentPosition) {
     const res = { 'df': {}, 'mf': {}, 'fw': {} };
     // DF
     res.df.xMin = 0.05 + GameEngine.minFormDistance;
-    res.df.xMax = GameEngine.INF;
-    position.mf.forEach(pos => {
-      res.df.xMax = Math.min(res.df.xMax, pos.x - GameEngine.minFormDistance);
-    });
-    opponentPosition.fw.forEach(pos => {
-      res.df.xMax = Math.min(res.df.xMax, pos.x);
-    })
+    res.df.xMax = GameEngine.getMaximum(position.mf.map(pos => pos.x));
+    res.df.xMax -= GameEngine.minFormDistance;
     // MF
-    res.mf.xMin = -GameEngine.INF;
-    position.df.forEach(pos => {
-      res.mf.xMin = Math.max(res.mf.xMin, pos.x + GameEngine.minFormDistance);
-    });
-    res.mf.xMax = GameEngine.INF;
-    position.fw.forEach(pos => {
-      res.mf.xMax = Math.min(res.mf.xMax, pos.x - GameEngine.minFormDistance);
-    });
+    res.mf.xMin = GameEngine.getMinimum(position.df.map(pos => pos.x));
+    res.mf.xMin += GameEngine.minFormDistance;
+    res.mf.xMax = GameEngine.getMaximum(position.fw.map(pos => pos.x));
+    res.mf.xMax -= GameEngine.minFormDistance;
     // FW
-    res.fw.xMin = -GameEngine.INF;
-    position.mf.forEach(pos => {
-      res.fw.xMin = Math.max(res.fw.xMin, pos.x + GameEngine.minFormDistance);
-    });
-    res.fw.xMax = -GameEngine.INF;
-    opponentPosition.df.forEach(pos => {
-      res.fw.xMax = Math.max(res.fw.xMax, pos.x);
-    });
+    res.fw.xMin = GameEngine.getMinimum(position.mf.map(pos => pos.x));
+    res.fw.xMin += GameEngine.minFormDistance;
+    res.fw.xMax = GameEngine.getMaximum(opponentPosition.df.map(pos => pos.x));
     return res;
   }
 
@@ -299,47 +322,30 @@ class GameEngine {
     const res = { 'df': {}, 'mf': {}, 'fw': {} };
     // DF
     res.df.xMax = 0.95 - GameEngine.minFormDistance;
-    res.df.xMin = -GameEngine.INF;
-    position.mf.forEach(pos => {
-      res.df.xMin = Math.max(res.df.xMin, pos.x + GameEngine.minFormDistance);
-    });
-    opponentPosition.fw.forEach(pos => {
-      res.df.xMin = Math.max(res.df.xMin, pos.x);
-    });
+    res.df.xMin = GameEngine.getMinimum(position.mf.map(pos => pos.x));
+    res.df.xMin += GameEngine.minFormDistance;
     // MF
-    res.mf.xMax = GameEngine.INF;
-    position.df.forEach(pos => {
-      res.mf.xMax = Math.min(res.mf.xMax, pos.x - GameEngine.minFormDistance);
-    });
-    res.mf.xMin = -GameEngine.INF;
-    position.fw.forEach(pos => {
-      res.mf.xMin = Math.max(res.mf.xMin, pos.x + GameEngine.minFormDistance);
-    });
+    res.mf.xMax = GameEngine.getMaximum(position.df.map(pos => pos.x));
+    res.mf.xMax -= GameEngine.minFormDistance;
+    res.mf.xMin = GameEngine.getMinimum(position.fw.map(pos => pos.x));
+    res.mf.xMin += GameEngine.minFormDistance;
     // FW
-    res.fw.xMax = GameEngine.INF;
-    position.mf.forEach(pos => {
-      res.fw.xMax = Math.min(res.fw.xMax, pos.x - GameEngine.minFormDistance);
-    });
-    res.fw.xMin = GameEngine.INF;
-    opponentPosition.df.forEach(pos => {
-      res.fw.xMin = Math.min(res.fw.xMin, pos.x);
-    });
+    res.fw.xMax = GameEngine.getMaximum(position.mf.map(pos => pos.x));
+    res.fw.xMax -= GameEngine.minFormDistance;
+    res.fw.xMin = GameEngine.getMinimum(opponentPosition.df.map(pos => pos.x));
     return res;
   }
 
-  static calcMoveArea(position, direction) {
-    const res = { 'home': {}, 'away': {} };
-    // home
-    if (direction === 'left') {
+  static calcMoveArea(position, homeDirection) {
+    const res = {};
+    if (homeDirection === 'left') {
+      // first half
       res.home = this.calcMoveAreaLeft(position.home, position.away);
-    } else {
-      res.home = this.calcMoveAreaRight(position.home, position.away);
-    }
-    // away
-    if (direction === 'left') {
-      res.away = this.calcMoveAreaLeft(position.away, position.home);
-    } else {
       res.away = this.calcMoveAreaRight(position.away, position.home);
+    } else {
+      // second half
+      res.home = this.calcMoveAreaRight(position.home, position.away);
+      res.away = this.calcMoveAreaLeft(position.away, position.home);
     }
     return res;
   }
@@ -360,25 +366,48 @@ class GameEngine {
     let score = {...initScore};
     let possession = firstPossession;
     let player = { 'pos': 'fw', 'index': 0 };
-    const initPosition = GameEngine.resetPosition(
-      homeStarter,
-      homeFormation,
-      homeDirection,
-      homeTarget,
-      awayStarter,
-      awayFormation,
-      awayDirection,
-      awayTarget
-    );
-    let currentPosition = GameEngine.copyObj(initPosition);
+    const initPosition = {
+      'home': GameEngine.resetPosition(
+        homeStarter,
+        homeFormation,
+        homeDirection,
+        homeTarget,
+        awayStarter,
+        awayFormation,
+        awayDirection,
+        awayTarget,
+        'home'
+      ),
+      'away': GameEngine.resetPosition(
+        homeStarter,
+        homeFormation,
+        homeDirection,
+        homeTarget,
+        awayStarter,
+        awayFormation,
+        awayDirection,
+        awayTarget,
+        'away'
+      )
+    };
+    let currentPosition = homeDirection === 'left' ?
+      GameEngine.copyObj(initPosition.home) :
+      GameEngine.copyObj(initPosition.away);
     let consecutivePossession = 0;
     for (let step = 0; step < duration; ++step) {
       if (!this.doNotRecord) {
         this.stats.score.push({...score});
         this.stats.playerPosition.push({
-          homeStyle: GameEngine.calcStyleAll(currentPosition.home, homeDirection),
-          awayStyle: GameEngine.calcStyleAll(currentPosition.away, awayDirection)
+          homeStyle: GameEngine.calcStyleAll(currentPosition.home, homeDirection, possession === 'home'),
+          awayStyle: GameEngine.calcStyleAll(currentPosition.away, awayDirection, possession === 'away')
         });
+        const ballPosition = GameEngine.calcStyle(
+          currentPosition[possession][player.pos][player.index],
+          possession === 'home' ? homeDirection : awayDirection,
+          null
+        );
+        ballPosition['z-index'] = 150;
+        this.stats.ballPosition.push(ballPosition);
         this.stats.possessionCount[possession] += 1;
       }
       const opponent = GameEngine.switchPossession(possession);
@@ -424,7 +453,7 @@ class GameEngine {
             score[possession] += 1;
             possession = opponent;
             player = { 'pos': 'fw', 'index': 0 };
-            currentPosition = GameEngine.copyObj(initPosition);
+            currentPosition = GameEngine.copyObj(initPosition[possession]);
             consecutivePossession = 0;
             continue;
           } else {
@@ -493,50 +522,56 @@ class GameEngine {
         consecutivePossession += 1;
       }
       // movement
-      const moveArea = GameEngine.calcMoveArea(
-        currentPosition, 
-        possession === 'home' ? homeDirection : awayDirection
-      );
-      const nextPosition = GameEngine.copyObj(currentPosition);
+      const moveArea = GameEngine.calcMoveArea(currentPosition, homeDirection);
       let attackDirection = homeDirection === 'left' ? 1 : -1;
       let defenseDirection = -attackDirection;
       if (possession !== 'home') {
         attackDirection = awayDirection === 'left' ? 1 : -1;
         defenseDirection = -attackDirection;
       }
+      const nextPosition = {};
       for (const side in currentPosition) {
+        nextPosition[side] = {
+          'gk': [...currentPosition[side].gk],
+          'target': {...currentPosition[side].target}
+        };
         for (let i = 0; i < GameEngine.fieldPos.length; ++i) {
           const pos = GameEngine.fieldPos[i];
+          nextPosition[side][pos] = [];
           for (const index in currentPosition[side][pos]) {
-            const { x, y } = currentPosition[side][pos][index]
+            const { x, y } = currentPosition[side][pos][index];
+            const moveTo = { x, y };
             if (side === possession) {
               if (Math.random() <= GameEngine.forwardProb) {
-                nextPosition[side][pos][index].x += 0.01 * attackDirection;
-              } else {
-                nextPosition[side][pos][index].x -= 0.01 * attackDirection;
+                moveTo.x = x + 0.01 * attackDirection;
+              } else if (Math.random() > GameEngine.forwardProb / 2) {
+                moveTo.x = x - 0.01 * attackDirection;
               }
             } else {
               if (Math.random() <= GameEngine.forwardProb) {
-                nextPosition[side][pos][index].x += 0.01 * defenseDirection;
-              } else {
-                nextPosition[side][pos][index].x -= 0.01 * defenseDirection;
+                moveTo.x = x + 0.01 * defenseDirection;
+              } else if (Math.random() > GameEngine.forwardProb / 2) {
+                moveTo.x = x - 0.01 * defenseDirection;
               }
             }
             const yProb = Math.random();
-            if (yProb < 1.0 / 3) {
-              nextPosition[side][pos][index].y += 0.01;
-            } else if (yProb > 2.0 / 3) {
-              nextPosition[side][pos][index].y -= 0.01;
+            if (yProb < 1.0 / 4) {
+              moveTo.y = y + 0.01;
+            } else if (yProb > 3.0 / 4) {
+              moveTo.y = y - 0.01;
             }
             // adjust position to prevent moveing outside of field
-            if (nextPosition[side][pos][index].x < moveArea[side][pos].xMin ||
-              nextPosition[side][pos][index].x > moveArea[side][pos].xMax) {
-              nextPosition[side][pos][index].x = x;    
+            if (moveTo.x < moveArea[side][pos].xMin) {
+              moveTo.x += 0.01;
             }
-            if (nextPosition[side][pos][index].y < 0.05 ||
-              nextPosition[side][pos][index].y > 0.95) {
-              nextPosition[side][pos][index].y = y;    
+            if (moveTo.x > moveArea[side][pos].xMax) {
+              moveTo.x -= 0.01;    
             }
+            if (moveTo.y < 0.05 ||
+              moveTo.y > 0.95) {
+              moveTo.y = y;    
+            }
+            nextPosition[side][pos].push(moveTo);
           }
         };
       }
@@ -650,6 +685,7 @@ class GameVisualizer extends Component {
     this.timerID = setInterval(
       () => this.updateStatus(),
       1
+      //1000
     );
   }
 
@@ -659,7 +695,8 @@ class GameVisualizer extends Component {
       this.setState({
         timer: timer + 1,
         score: this.engine.stats.score[timer],
-        position: this.engine.stats.playerPosition[timer]
+        playerPosition: this.engine.stats.playerPosition[timer],
+        ballPosition: this.engine.stats.ballPosition[timer]
       });
     } else {
       clearInterval(this.timerID);
@@ -711,8 +748,7 @@ class GameVisualizer extends Component {
     return `${this.formatNumber(minitues)} : ${this.formatNumber(seconds)}`;
   }
 
-  drawFormation(playerStyle, playerIcon) {
-    // TODO: draw the ball
+  drawPlayer(playerStyle, playerIcon) {
     return (
       <div className="game-presentation__formation">
         {
@@ -736,9 +772,20 @@ class GameVisualizer extends Component {
     );
   }
 
+  drawBall(ballStyle, ballIcon) {
+    return (
+      <img 
+        src={ballIcon}
+        alt="soccer-ball-icon"
+        style={ballStyle}
+        className="game-presentation__ball-icon"
+      />
+    );
+  }
+
   render() {
     const { home, away, handleEndGame } = this.props;
-    const { timer, score, position, goalHome, goalAway } = this.state;
+    const { timer, score, playerPosition, ballPosition, goalHome, goalAway } = this.state;
     return (
       <div className="game-visualizer">
         <div className="game-visualizer__timer">
@@ -773,7 +820,7 @@ class GameVisualizer extends Component {
                   <div key={index} className="game-record__record">
                     <p>{scoringRecord.playerName}</p>
                     <img
-                      src={soccerIcon}
+                      src={soccerIconInGame}
                       alt="football"
                       className="game-record__image"
                     />
@@ -791,7 +838,7 @@ class GameVisualizer extends Component {
                   <div key={index} className="game-record__record">
                     <p>{scoringRecord.playerName}</p>
                     <img
-                      src={soccerIcon}
+                      src={soccerIconInGame}
                       alt="football"
                       className="game-record__image"
                     />
@@ -803,10 +850,11 @@ class GameVisualizer extends Component {
           </div>
         </div>
         {
-          position &&
+          playerPosition &&
           <div className="game-presentation">
-            {this.drawFormation(position.homeStyle, homePlayerIcon)}
-            {this.drawFormation(position.awayStyle, awayPlayerIcon)}
+            {this.drawPlayer(playerPosition.homeStyle, homePlayerIcon)}
+            {this.drawPlayer(playerPosition.awayStyle, awayPlayerIcon)}
+            {this.drawBall(ballPosition, soccerIconInGame)}
           </div>
         }
         <div
