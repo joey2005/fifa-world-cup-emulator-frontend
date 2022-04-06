@@ -13,6 +13,7 @@ class GameEngine {
   static shootingSuccess = 0.5;
   static minShootingRange = 0.2;
   static maxShootingRange = 0.5;
+  static penaltySuccess = 0.7;
   static maxPossession = 60;
   static fieldPos = ['df', 'mf', 'fw'];
   static fieldPosAll = ['gk', 'df', 'mf', 'fw'];
@@ -20,12 +21,13 @@ class GameEngine {
   static minFormDistance = 0.08;
   static INF = 1000000000;
 
-  constructor(home, away, extraTime) {
+  constructor(home, away, extraTime, doNotRecord) {
     this.team = {
       'home': home,
       'away': away
     }
     this.extraTime = extraTime;
+    this.doNotRecord = doNotRecord;
     this.stats = {
       goal: [],
       playerPosition: [],
@@ -53,10 +55,13 @@ class GameEngine {
     };
   }
 
-  static getPlayers(squad, pos, nums) {
-    const pool = squad.filter(player => {
+  static getPlayers(squad, pos, nums, extraPool) {
+    let pool = squad.filter(player => {
       return player.Pos === pos;
     });
+    if (pool.length < nums) {
+      pool = pool.concat(extraPool);
+    }
     const res = [];
     while (nums > 0) {
       let index = -1;
@@ -73,15 +78,16 @@ class GameEngine {
       pool.splice(index, 1);
       nums -= 1;
     }
-    return res;
+    return {res, pool};
   }
 
   static getStarter(squad, formation) {
     const res = {};
-    res['gk'] = GameEngine.getPlayers(squad, 'GK', 1);
-    res['df'] = GameEngine.getPlayers(squad, 'DF', formation[0]);
-    res['mf'] = GameEngine.getPlayers(squad, 'MF', formation[1]);
-    res['fw'] = GameEngine.getPlayers(squad, 'FW', formation[2]);
+    res['gk'] = GameEngine.getPlayers(squad, 'GK', 1, []).res;
+    res['df'] = GameEngine.getPlayers(squad, 'DF', formation[0], []).res;
+    const tempRes = GameEngine.getPlayers(squad, 'MF', formation[1], []);
+    res['mf'] = tempRes.res;
+    res['fw'] = GameEngine.getPlayers(squad, 'FW', formation[2], tempRes.pool).res;
     return res;
   }
 
@@ -110,7 +116,10 @@ class GameEngine {
     return res;
   }
 
-  static deepcopy(obj) {
+  static copyObj(obj) {
+    if (this.doNotRecord) {
+      return {...obj};
+    }
     return JSON.parse(JSON.stringify(obj));
   }
 
@@ -361,15 +370,17 @@ class GameEngine {
       awayDirection,
       awayTarget
     );
-    let currentPosition = GameEngine.deepcopy(initPosition);
+    let currentPosition = GameEngine.copyObj(initPosition);
     let consecutivePossession = 0;
     for (let step = 0; step < duration; ++step) {
-      this.stats.score.push({...score});
-      this.stats.playerPosition.push({
-        homeStyle: GameEngine.calcStyleAll(currentPosition.home, homeDirection),
-        awayStyle: GameEngine.calcStyleAll(currentPosition.away, awayDirection)
-      });
-      this.stats.possessionCount[possession] += 1;
+      if (!this.doNotRecord) {
+        this.stats.score.push({...score});
+        this.stats.playerPosition.push({
+          homeStyle: GameEngine.calcStyleAll(currentPosition.home, homeDirection),
+          awayStyle: GameEngine.calcStyleAll(currentPosition.away, awayDirection)
+        });
+        this.stats.possessionCount[possession] += 1;
+      }
       const opponent = GameEngine.switchPossession(possession);
       const rankingDifference = (this.team[opponent].ranking - this.team[possession].ranking) / GameEngine.levelDifference;
       // adjust consecutivePossession
@@ -396,21 +407,24 @@ class GameEngine {
           // shooting success or not
           if (Math.random() <= GameEngine.shootingSuccess &&
             Math.random() <= GameEngine.calcShootingSuccessRate(
-              targetDistance, rankingDifference)) {
-            this.stats.shootSuccess[possession] += 1;
-            const playerName = possession === 'home' ?
-              homeStarter[player.pos][player.index] :
-              awayStarter[player.pos][player.index];
-            this.stats.goal.push({
-              possession,
-              playerName,
-              time: Number.parseInt((timePassed + step + 59) / 60)
-            });
+              targetDistance, rankingDifference
+            )) {
+            if (!this.doNotRecord) { 
+              this.stats.shootSuccess[possession] += 1;
+              const playerName = possession === 'home' ?
+                homeStarter[player.pos][player.index] :
+                awayStarter[player.pos][player.index];
+              this.stats.goal.push({
+                possession,
+                playerName,
+                time: Number.parseInt((timePassed + step + 59) / 60)
+              });
+            }
             // change score and reset possession & positions
             score[possession] += 1;
             possession = opponent;
             player = { 'pos': 'fw', 'index': 0 };
-            currentPosition = GameEngine.deepcopy(initPosition);
+            currentPosition = GameEngine.copyObj(initPosition);
             consecutivePossession = 0;
             continue;
           } else {
@@ -422,8 +436,11 @@ class GameEngine {
           this.stats.passAttempt[possession] += 1;
           if (Math.random() <= GameEngine.passingSuccess &&
             Math.random() <= GameEngine.calcPassingSuccessRate(
-              targetDistance, rankingDifference)) {
-            this.stats.passSuccess[possession] += 1;
+              targetDistance, rankingDifference
+            )) {
+            if (!this.doNotRecord) {
+              this.stats.passSuccess[possession] += 1;
+            }
             const distanceArray = [];
             GameEngine.fieldPos.forEach(pos => {
               for (const index in currentPosition[possession][pos]) {
@@ -478,7 +495,7 @@ class GameEngine {
         currentPosition, 
         possession === 'home' ? homeDirection : awayDirection
       );
-      const nextPosition = GameEngine.deepcopy(currentPosition);
+      const nextPosition = GameEngine.copyObj(currentPosition);
       let attackDirection = homeDirection === 'left' ? 1 : -1;
       let defenseDirection = -attackDirection;
       if (possession !== 'home') {
@@ -565,23 +582,49 @@ class GameEngine {
   }
 
   penaltyShootout() {
-    // TODO: implement penalty shootout
     let score = {
       'home': 0,
       'away': 0
+    }
+    for (let turn = 0; turn < 5; ++turn) {
+      // home
+      if (Math.random() <= GameEngine.penaltySuccess) {
+        score.home += 1;
+      }
+      if (score.home - score.away > 5 - turn ||
+        score.away - score.home > 4 - turn) {
+        return score;
+      }
+      // away
+      if (Math.random() <= GameEngine.penaltySuccess) {
+        score.away += 1;
+      }
+      if (score.away - score.home > 4 - turn ||
+        score.home - score.away > 4 - turn) {
+        return score;
+      }
+    }
+    while (score.home === score.away) {
+      if (Math.random() <= GameEngine.penaltySuccess) {
+        score.home += 1;
+      }
+      if (Math.random() <= GameEngine.penaltySuccess) {
+        score.away += 1;
+      }
     }
     return score;
   }
 
   startGame() {
-    const regularScore = this.run(90, { 'home': 0, 'away': 0 }, 0);
-    if (this.extraTime && regularScore.home === regularScore.away) {
-      const extraScore = this.run(30, regularScore, 90 * 60);
-      if (extraScore.home === extraScore.away) {
-        const finalScore = this.penaltyShootout();
-        this.stats.score.push(finalScore);
+    const res = {};
+    res.regularScore = this.run(90, { 'home': 0, 'away': 0 }, 0);
+    if (this.extraTime && res.regularScore.home === res.regularScore.away) {
+      res.extraScore = this.run(30, res.regularScore, 90 * 60);
+      if (res.extraScore.home === res.extraScore.away) {
+        res.penaltyScore = this.penaltyShootout();
       }
     }
+    return res;
   }
 }
 
@@ -599,18 +642,12 @@ class GameVisualizer extends Component {
 
   componentDidMount() {
     const { home, away, extraTime } = this.props;
-    this.engine = new GameEngine(home, away, extraTime);
+    this.engine = new GameEngine(home, away, extraTime, false);
     this.engine.startGame();
     this.timerID = setInterval(
       () => this.updateStatus(),
       1
     );
-    // console.log(this.engine.stats.goal);
-    // console.log(this.engine.stats.possessionCount);
-    // console.log(this.engine.stats.passAttempt);
-    // console.log(this.engine.stats.passSuccess);
-    // console.log(this.engine.stats.shootAttempt);
-    // console.log(this.engine.stats.shootSuccess);
   }
 
   updateStatus() {

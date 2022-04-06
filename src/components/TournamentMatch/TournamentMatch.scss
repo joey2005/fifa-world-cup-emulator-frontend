@@ -1,0 +1,59 @@
+@use '../../styles/partials/variables' as *;
+
+.tournament {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__group-standings {
+    width: 40%;
+    margin: 3.2rem 5% 0 5%;
+  }
+
+  &__standing-nav {
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+    border-bottom: solid 0.1rem $divider-color-dark;
+    margin-top: 0.8rem;
+  }
+
+  &__team-standing {
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+    padding: 0.4rem 0;
+    border-bottom: solid 0.1rem $divider-color-dark;
+
+    &--green {
+      background-color: $accept-background-color;
+    }
+  }
+
+  &__standing-nav-item,
+  &__team-stats {
+    width: 8%;
+
+    &--first {
+      width: 44%;
+      padding-left: 4%;
+    }
+
+    &--bold {
+      font-weight: bold;
+    }
+  }
+
+  &__button {
+    margin: 3.2rem;
+  }
+}

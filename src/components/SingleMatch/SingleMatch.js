@@ -51,11 +51,7 @@ class SingleMatch extends Component {
       })
       .catch(err => {
         console.log(err);
-      })
-  }
-
-  componentDidUpdate() {
-    console.log(this.state.homeTeam, this.state.awayTeam);
+      });
   }
 
   handleStartGame = (event) => {

@@ -7,6 +7,7 @@ import TeamsPage from './pages/TeamsPage/TeamsPage';
 import TeamInfo from './components/TeamInfo/TeamInfo';
 import GamePage from './pages/GamePage/GamePage';
 import SingleMatch from './components/SingleMatch/SingleMatch';
+import TournamentMatch from './components/TournamentMatch/TournamentMatch';
 import bg1 from './assets/images/stadium-1.jpg';
 import bg2 from './assets/images/stadium-2.jpg';
 import bg3 from './assets/images/stadium-3.jpg';
@@ -37,6 +38,7 @@ function App() {
             <Route path="/teams/:teamID" component={TeamInfo} />
             <Route path="/games" exact component={GamePage} />
             <Route path="/games/friendly" exact component={SingleMatch} />
+            <Route path="/games/tournament" exact component={TournamentMatch} />
           </Switch>
         </div>
       </div>
