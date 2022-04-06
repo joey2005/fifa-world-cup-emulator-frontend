@@ -30,9 +30,15 @@
 
   &__detail {
     margin-top: 1.6rem;
-    
-    &--bold {
-      font-weight: bold;
-    }
+    height: 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__qr-code {
+    margin-top: 1.6rem;
+    width: 8rem;
+    height: 8rem;
   }
 }
