@@ -13,7 +13,7 @@ function AboutPage() {
       </div>
       <div className="about__story">
         <p className="about__story-text about__story-text--align-right">
-          Inspired by the biggest sporting event of the world, this web app is aiming to provide a simple glance of the football game, and all qualified teams for the upcoming Qatar FIFA Wolrd Cup.
+          Inspired by the biggest sporting event of the world, this web app is aiming to provide a simple glance of the football game, and all qualified teams for the upcoming Qatar FIFA World Cup.
         </p>
       </div>
     </section>
