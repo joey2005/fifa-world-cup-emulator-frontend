@@ -1,12 +1,23 @@
-# Getting Started with Create React App
+# FIFA World Cup Emulator
+
+This project was inspired by the biggest upcoming sporting event of the world - 2022 Qatar FIFA World Cup.\
+By presenting all qualified national teams (including teams still reamins in the qualification matches) and the basic match / tournament simulation engine, this project is aiming to provide a simple glance of the football games and makes everyone can enjoy the upcoming 2022 Qatar FIFA World Cup.
+
+## Getting Started with intallation & development
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
+
+To start with the porject, you should first run follwing command in the project directory:
+
+#### `npm install`
+
+This allows you to install all the necessary dependencies for the app.
 
 In the project directory, you can run:
 
-### `npm start`
+#### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -14,57 +25,26 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+## Playing With the app
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In the home page of this app, you will see two buttons clickable:
 
-### `npm run build`
+![Alt text](https://yans-capstone-backend.herokuapp.com/screenshots/screenshot-1.jpg "home page")
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+By clicking the view / edit teams button on the home page, you will be directed to the temas page that allow you to view all qualified national teams for the 2022 Qatar FIFA World Cup.\
+You can choose to view the detialed information or editing the squad / formations of a specific team via clicking the country flag of that team.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Alt text](https://yans-capstone-backend.herokuapp.com/screenshots/screenshot-2.jpg "teams page")
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+By clicking the play matches button on the home page, you will be directed to the game page that contains two modes for you to choose to play.\
+In the single match mode, you can choose two different teams to play against each other.\
+After selecting the teams that you want to play, you can hit the start game button to start the simulation match between your chosen teams.
 
-### `npm run eject`
+![Alt text](https://yans-capstone-backend.herokuapp.com/screenshots/screenshot-3.jpg "game page")
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+You can also choose to play in the tournament mode by selecting the corresponding option on the game page, and you will see the simulation of the entire tournament.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Demo
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This app was also deployed with the [Netlify](https://www.netlify.com/), click [here](https://yans-fifa-world-cup-emulator.netlify.app/) to play with the demo.\
+If you had any questions or suggestions for this app, feel free to reach out to us via the contact information on the contact page.
