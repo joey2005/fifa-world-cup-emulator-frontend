@@ -1,7 +1,7 @@
 # FIFA World Cup Emulator
 
-This project was inspired by the biggest upcoming sportin event of the world - Qatar FIFA World Cup.\
-By presenting all qualified national teams (including teams still reamins in the qualification matches) and the basic match/tournament simulation engine, the project is aiming to provide a simple glance of the football games and makes everyone can enjoy the upcoming 2022 FIFA World Cup.
+This project was inspired by the biggest upcoming sportin event of the world - 2022 Qatar FIFA World Cup.\
+By presenting all qualified national teams (including teams still reamins in the qualification matches) and the basic match/tournament simulation engine, this project is aiming to provide a simple glance of the football games and makes everyone can enjoy the upcoming 2022 Qatar FIFA World Cup.
 
 ## Getting Started with intallation & development
 
@@ -9,14 +9,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Available Scripts
 
-To start with the porject, you should first run follwing command inn the project directory:
+To start with the porject, you should first run follwing command in the project directory:
 
 #### `npm install`
 
 This allows you to install all the necessary dependencies for the app.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
 In the project directory, you can run:
 
@@ -51,6 +48,6 @@ You can choose to play in the tournament mode, and you will see the simulation o
 
 ## Demo
 
-This app was also deployed with the Netlify. Click [here](https://yans-fifa-world-cup-emulator.netlify.app/) to play with the demo.\
+This app was also deployed with the [Netlify](https://www.netlify.com/). Click [here](https://yans-fifa-world-cup-emulator.netlify.app/) to play with the demo.\
 
 If you had any questions or suggestions for this app, feel free to reach out to us via the contact information on the contact page.
