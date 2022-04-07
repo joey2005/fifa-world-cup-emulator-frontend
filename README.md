@@ -11,13 +11,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 To start with the porject, you should first run follwing command in the project directory:
 
-#### `npm install`
+```bash
+npm install
+```
 
 This allows you to install all the necessary dependencies for the app.
 
 In the project directory, you can run:
 
-#### `npm start`
+```bash
+npm start
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
