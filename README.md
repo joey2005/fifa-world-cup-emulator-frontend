@@ -1,6 +1,6 @@
 # FIFA World Cup Emulator
 
-This project was inspired by the biggest upcoming sportin event of the world - 2022 Qatar FIFA World Cup.\
+This project was inspired by the biggest upcoming sporting event of the world - 2022 Qatar FIFA World Cup.\
 By presenting all qualified national teams (including teams still reamins in the qualification matches) and the basic match/tournament simulation engine, this project is aiming to provide a simple glance of the football games and makes everyone can enjoy the upcoming 2022 Qatar FIFA World Cup.
 
 ## Getting Started with intallation & development
