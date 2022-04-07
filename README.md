@@ -31,7 +31,7 @@ In the home page of this app, you will see two buttons clickable:
 
 ![Alt text](https://yans-capstone-backend.herokuapp.com/screenshots/screenshot-1.jpg "home page")
 
-By clicking the view/edit teams button on the home page, you will be directed to the temas page that allow you to view all qualified national teams for the 2022 Qatar FIFA World Cup.\
+By clicking the view / edit teams button on the home page, you will be directed to the temas page that allow you to view all qualified national teams for the 2022 Qatar FIFA World Cup.\
 You can choose to view the detialed information or editing the squad / formations of a specific team via clicking the country flag of that team.
 
 ![Alt text](https://yans-capstone-backend.herokuapp.com/screenshots/screenshot-2.jpg "teams page")
@@ -46,5 +46,5 @@ You can also choose to play in the tournament mode by selecting the correspondin
 
 ## Demo
 
-This app was also deployed with the [Netlify](https://www.netlify.com/). Click [here](https://yans-fifa-world-cup-emulator.netlify.app/) to play with the demo.\
+This app was also deployed with the [Netlify](https://www.netlify.com/), click [here](https://yans-fifa-world-cup-emulator.netlify.app/) to play with the demo.\
 If you had any questions or suggestions for this app, feel free to reach out to us via the contact information on the contact page.
