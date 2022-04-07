@@ -40,9 +40,9 @@ You can choose to view the detialed information or editing the squad / formation
 
 ![Alt text](https://yans-capstone-backend.herokuapp.com/screenshots/screenshot-2.jpg "teams page")
 
-By clicking the play matches button on the home page, you will be directed to the game page that contains two modes for you to choose to play. \
+By clicking the play matches button on the home page, you will be directed to the game page that contains two modes for you to choose to play.\
 
-In the single match mode, you can choose two different teams to play against each other. \
+In the single match mode, you can choose two different teams to play against each other.\
 By clicking the start game button, the simulation match between your chosen teams will start.
 
 ![Alt text](https://yans-capstone-backend.herokuapp.com/screenshots/screenshot-3.jpg "game page")
@@ -51,6 +51,6 @@ You can choose to play in the tournament mode, and you will see the simulation o
 
 ## Demo
 
-This app was also deployed with the Netlify. Click [here](https://yans-fifa-world-cup-emulator.netlify.app/) to play with the demo. \
+This app was also deployed with the Netlify. Click [here](https://yans-fifa-world-cup-emulator.netlify.app/) to play with the demo.\
 
 If you had any questions or suggestions for this app, feel free to reach out to us via the contact information on the contact page.
